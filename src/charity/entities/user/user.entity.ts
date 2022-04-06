@@ -1,5 +1,6 @@
-import { RolesEntity } from './../auth/role.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { RoleEntity } from './../role/role.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BlogEntity } from '../blog/blog.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -7,11 +8,14 @@ export class UserEntity {
     id: number
 
     @Column()
-    phone: string
+    username: string
 
     @Column()
     password: string
 
-    @ManyToOne(() => RolesEntity, role => role.obj_user)
-    role: RolesEntity
+    @ManyToOne(() => RoleEntity, role => role.obj_user)
+    role: RoleEntity
+
+    @OneToMany(() => BlogEntity, blog => blog.obj_user)
+    obj_blogs: BlogEntity
 }

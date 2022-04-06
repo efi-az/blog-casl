@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {IsMobilePhone, IsString} from 'class-validator';
+import {IsString} from 'class-validator';
 export class UserAuthDto {
   
-  @IsMobilePhone('fa-IR')
+  @IsString()
   @ApiProperty()
-  phone: string;
+  username: string;
 
   @IsString()
   @ApiProperty()

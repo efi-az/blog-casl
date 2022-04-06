@@ -19,9 +19,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             where: {id: payload.userId},
             relations: ['role']
         })
+        const permission = await this.userService.findAllPermissionsOfUser(user)
+        
         if (!user) throw new UnauthorizedException()
 
-        const {password, ...res} = {...user, role: user.role.name}
+        const {password, ...res} = {...user, role: user.role.name, permission}
         return res
     }
 }

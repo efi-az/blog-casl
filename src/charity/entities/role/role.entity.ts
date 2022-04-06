@@ -1,9 +1,9 @@
-import { UserEntity } from './../user/user.entity';
+import { PermissionEntity } from './../permission/permission.entity';
+import { UserEntity } from '../user/user.entity';
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { PermissionEntity } from "./permission.entity";
 
 @Entity('roles')
-export class RolesEntity {
+export class RoleEntity {
     @PrimaryGeneratedColumn('rowid')
     id: number
     
@@ -15,4 +15,5 @@ export class RolesEntity {
 
     @OneToMany(() => UserEntity, user => user.role)
     obj_user: UserEntity[]
+    
 }

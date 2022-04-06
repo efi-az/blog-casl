@@ -1,21 +1,21 @@
+import { RoleService } from './../charity/services/role/role.service';
 import { UserAuthDto } from './dto/user-auth.dto';
 import { UserService } from './../charity/services/user/user.service';
-import { UserNotFound, PasswordNotCorrect, UserAleardyExist } from './../charity/exceptions/user/user.exception';
+import { UserNotFound, PasswordNotCorrect, UserAlreadyExist } from './../charity/exceptions/user/user.exception';
 import { UserEntity } from './../charity/entities/user/user.entity';
 import {Injectable} from '@nestjs/common';
 import {JwtService} from "@nestjs/jwt";
 import * as bcrypt from 'bcrypt'
 import {jwtConstants} from "./constants";
-import { RolesService } from '../charity/services/auth/role.service';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly userService: UserService, private jwtService: JwtService,
-                private readonly roleService: RolesService) {
+                private readonly roleService: RoleService) {
     }
 
     async validateUser(userLoginDto: UserAuthDto): Promise<any> {
-        const findUser = await this.userService.findOne({where: {phone: userLoginDto.phone}})
+        const findUser = await this.userService.findOne({where: {username: userLoginDto.username}})
 
         if (!findUser) throw new UserNotFound()
 
@@ -35,20 +35,20 @@ export class AuthService {
     }
 
     async registerUser(userDto: UserAuthDto): Promise<any> {
-        const findUser = await this.userService.findOne({where: {phone: userDto.phone}})
+        const findUser = await this.userService.findOne({where: {username: userDto.username}})
 
         if (findUser)
-            throw new UserAleardyExist()
+            throw new UserAlreadyExist()
 
         // hashed password
         const hashPassword = bcrypt.hashSync(userDto.password, jwtConstants.salt)
 
-        const findRole = await this.roleService.findOne({name: 'guest'})
+        const findRole = await this.roleService.findByName('guest')
 
         // create user
         const user = new UserEntity()
 
-        user.phone = userDto.phone
+        user.username = userDto.username
         user.password = hashPassword
         user.role = findRole
 

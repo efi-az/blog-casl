@@ -1,7 +1,6 @@
 import { PermissionAction, PermissionCondition } from '../../../ability/ability.interface';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { RolesEntity } from "./role.entity";
-import { ObjectEntity } from './object.entity';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { RoleEntity } from '../role/role.entity';
 
 @Entity('permissions')
 export class PermissionEntity {
@@ -11,18 +10,18 @@ export class PermissionEntity {
     @Column()
     name: string
 
+    @Column()
+    subject: string
+    
     @Column({type: 'enum', enum: PermissionAction})
     action: PermissionAction
 
-    @ManyToOne(() => ObjectEntity, object => object.obj_permissions)
-    obj_object: ObjectEntity
+    @Column({type: 'json', nullable: true})
+    condition: string
 
-    @Column({type: 'json'})
-    condition: string 
-
-    @ManyToMany(() => RolesEntity, role => role.obj_permissions)
-    @JoinTable({name: 'role_permissions'})
-    obj_roles: RolesEntity
+    @ManyToMany(() => RoleEntity, role => role.obj_permissions)
+    @JoinTable({name: 'role_permission'})
+    obj_roles: RoleEntity[]
 
     public static parseCondition(condition: PermissionCondition, variables: Record<string, any>): PermissionCondition {
         if (!condition) return null;

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-export class UserAleardyExist extends HttpException {
+export class UserAlreadyExist extends HttpException {
     constructor() {
         super('کاربر تکراری است', HttpStatus.CONFLICT) 
     }

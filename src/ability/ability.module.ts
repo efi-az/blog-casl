@@ -5,7 +5,7 @@ import { PermissionsGuard } from './ability.guard';
 
 @Module({
     imports: [CharityModule],
-    providers: [CaslAbilityFactory],
-    exports: [CaslAbilityFactory]
+    providers: [CaslAbilityFactory, PermissionsGuard],
+    exports: [CaslAbilityFactory, PermissionsGuard]
 })
 export class AbilityModule {}
